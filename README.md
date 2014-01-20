@@ -4,7 +4,7 @@ Clients define ***achievement rules*** which define conditions that ***players**
 
 AGE is implemented in [CoffeeScript](http://coffeescript.org/) but compiled to JavaScript prior to publishing.  It should work in any [Node.js](http://nodejs.org) environment.
 
-(It may also work, or could be made to work, within a browser, but we haven't had the need for that nor the time to test it.  If you are interested in this feature, please [let us know](https://github.com/rodw/age/issues).
+(It may also work, or could be made to work, within a browser, but we haven't had the need for that nor the time to test it.  If you are interested in this feature, please [let us know](https://github.com/rodw/age/issues).)
 
 ## Examples
 
