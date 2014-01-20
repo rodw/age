@@ -15,7 +15,7 @@ class DataStore
   #     `player_data`
   make_player:(player_data)=>
     return {
-      id: player_data?.id
+      id: player_data.id
       achievements: []
       history: []
       data: player_data

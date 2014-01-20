@@ -121,7 +121,6 @@ describe 'GameEngine',=>
               (achievement2 in achievements).should.be.ok
               done()
 
-
   it 'emits  \"event-occurred\" events',(done)=>
     player = { id:12346, name: { first: 'John', last: 'Doe' } }
     event = "Some Event"
@@ -163,7 +162,7 @@ describe 'GameEngine',=>
     player = { id:12346, name: { first: 'John', last: 'Doe' } }
     achievement_rule = new AchievementRule {
       key: "Two Events"
-      predicate:(engine,player,callback)->
+      predicate:(key,engine,player,callback)->
         engine.get_player_history player, (err,history)->
           if history?.length >= 2
             callback(err,true)

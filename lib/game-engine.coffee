@@ -70,7 +70,7 @@ class GameEngine extends EventEmitter
   # This method will emit a `GameEngine.EET_OCCURRED`
   # message to any registered listeners.
   add_event:(player,event,callback)=>
-    @datastore.record_event player,event, (err)=>
+    @datastore.record_event player, event, (err)=>
       if err?
         callback?(err)
       else
@@ -133,32 +133,51 @@ class GameEngine extends EventEmitter
       Util.for_each_async @achievement_rules, action, ()=>
         callback?(null,player?.achievements)
 
+  _evaluate_single_achievement:(key,player,rule,callback)=>
+    if rule.multiplicity? and rule.multiplicity > 0
+      count = Util.count(player.achievements,key,rule.multiplicity)
+      if count >= rule.multiplicity
+        callback?()
+        return
+    rule.predicate key, this, player, (err,achieved)=>
+      if err?
+        callback?(err)
+      else if achieved
+        player.achievements.push(key)
+        if rule.transient? and rule.transient
+          callback?()
+        else
+          @add_achievement(player,key,callback)
+      else
+        callback?()
+
   # `_evaluate_achievement_rule` is a private utility method.
   # This method will evaluate the given `rule` for the given
   # `player`, make the requisite changes to the game state
   # and then invoke the `callback` method.
   _evaluate_achievement_rule:(player,rule,callback)=>
     if typeof rule.key is 'function'
-      key = rule.key(this,player)
+      keyfn = rule.key
     else
-      key = rule.key
-    if rule.multiplicity? and rule.multiplicity > 0
-      count = Util.count(player.achievements,key,rule.multiplicity)
-      if count >= rule.multiplicity
-        callback?()
-        return
-
-    rule.predicate this,player, (err,achieved)=>
+      keyfn = (e,p,c)->c(null,rule.key)
+    keyfn this, player, (err,keys)=>
       if err?
         callback?(err)
-      else if achieved
-        player.achievements.push(key)
-        if rule.transient
-          callback?()
-        else
-          @add_achievement(player,key,callback)
-      else
+        return
+      else unless keys?
         callback?()
+        return
+      else
+        keys = [ keys ] if (not (Array.isArray(keys)))
+        for_each = (key,index,list,next)=>
+          @_evaluate_single_achievement key, player, rule, (err)=>
+            if err?
+              callback?(err)
+            else
+              next()
+        Util.for_each_async(keys,for_each,callback)
+
+
 
 # The GameEngine is exported under the name `GameEngine`.
 exports = exports ? this

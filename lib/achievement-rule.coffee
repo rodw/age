@@ -28,10 +28,22 @@ class AchievementRule
   #    transient while an achievement such as "logged-in at least 10 times" might
   #    be considered permanent.
   #
-  # 3. *`key`* -- either an object (typically a string) that acts as an identifier
-  #    for this achievement (as stored within a player's `achievements` container) *or*
-  #    a function (accepting two arguments: a GameEngine instance and a player object)
-  #    that returns such an identifier.
+  # 3. *`key`* -- an identifier for this achievement (as stored within a player's
+  #    `achievements` container)
+  #
+  #    The `key` attribute can take several forms:
+  #
+  #      * a scalar string or number that acts as an identifier for this achievement
+  #
+  #      * an array of strings or numbers, that indicates this single rule can
+  #        result in several achivements.  The `predicate` function will be evaluated
+  #        once for each element of the array.
+  #
+  #      * a function that yields a scalar value or an array, in which case the
+  #        function is evaluated and the corresponding scalar or array is treated
+  #        as above.  This function is passed three arguments: a GameEngine instance,
+  #        a player object, and a callback function (that accepts an error parameter
+  #        and a key value).
   #
   #    The latter case (the function) can be used to create dynamic identifiers.
   #    For example, for an achievement such as "Logged in on <DATE>".
@@ -53,10 +65,15 @@ class AchievementRule
   # object is constructed.
   #
   constructor:(props={})->
-    @multiplicity = props?.multiplicity ? 1
-    @transient = props?.transient ? false
-    @key = props?.key ? (engine,player)->throw new Error("Method not implemented.")
-    @predicate = props?.predicate ? (engine,player,callback)->throw new Error("Method not implemented.")
+    @multiplicity = props?.multiplicity if props?.multiplicity?
+    @transient = props?.transient if props?.transient?
+    @key = props?.key if props?.key?
+    @predicate = props?.predicate if props.predicate?
+
+  multiplicity:1
+  transient:false
+  key: ()->throw new Error("Method not implemented.")
+  predicate: ()->throw new Error("Method not implemented.")
 
 # The AchievementRule type is exported under the name `AchievementRule`.
 exports = exports ? this

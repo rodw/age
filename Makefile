@@ -37,6 +37,8 @@ MOCHA_COV_ARGS  ?= -R html-cov --compilers coffee:coffee-script --globals "_\$$j
 MARKDOWN_EXE ?= ./node_modules/.bin/marked
 MARKDOWN_SRCS ?= $(shell find . -type f -name '*.md' | grep -v node_modules | grep -v module)
 MARKDOWN_HTML ?= ${MARKDOWN_SRCS:.md=.html}
+LITCOFFEE_SRCS ?= $(shell find . -type f -name '*.litcoffee' | grep -v node_modules | grep -v module)
+LITCOFFEE_HTML ?= ${LITCOFFEE_SRCS:.litcoffee=.html}
 MARKDOWN_EXE_ARGS ?= -gfm
 MARKDOWN_PREFIX ?= "<html><body>"
 MARKDOWN_SUFFIX ?= "</body></html>"
@@ -46,7 +48,7 @@ MARKDOWN_SUFFIX ?= "</body></html>"
 ################################################################################
 
 .SUFFIXES:;
-.PHONY: all clean really-clean npm install clean-node-modules really-clean-node-modules tes  clean-test-module-install clean-module module test-module-install coverage clean-coverage docco markdown clean-docco clean-markdown docs clean-docs publish coffee;
+.PHONY: all clean really-clean npm install clean-node-modules really-clean-node-modules tes  clean-test-module-install clean-module module test-module-install coverage clean-coverage docco markdown clean-docco clean-markdown docs clean-docs publish coffee litcoffee clean-litcoffee;
 
 ### ALL ########################################################################
 all: test;
@@ -91,8 +93,11 @@ clean-module:; rm -rf ${MODULE_DIR}
 publish: module test-module-install; $(NPM_EXE) publish $(MODULE_DIR)
 
 ### MOCHA ######################################################################
-test: $(NODE_MODULES) $(MOCHA_TESTS)
+test: test-mocha test-litcoffee;
+test-mocha: $(NODE_MODULES) $(MOCHA_TESTS) $(COFFEE_SRCS) $(COFFEE_TEST_SRCS);
 	$(MOCHA_EXE) $(MOCHA_TEST_ARGS) $(MOCHA_TESTS)
+test-litcoffee: $(NODE_MODULES) $(LITCOFFEE_SRCS) $(COFFEE_SRCS);
+	$(COFFEE_EXE) $(LITCOFFEE_SRCS)
 coverage: js
 	rm -rf $(JSCOVERAGE_TMP_DIR)
 	rm -rf $(LIB_COV)
@@ -106,12 +111,21 @@ coverage: js
 clean-coverage:; rm -rf  $(JSCOVERAGE_TMP_DIR) $(LIB_COV) $(JSCOVERAGE_REPORT)
 
 ### DOCS #######################################################################
-docs: markdown docco
+docs: markdown litcoffee docco
+
 .SUFFIXES: .html .md
 .md.html:
 	(echo $(MARKDOWN_PREFIX) > $@) && ($(MARKDOWN_EXE) $(MARKDOWN_EXE_ARGS) $< >> $@) && (echo $(MARKDOWN_SUFFIX) >> $@)
 $(MARKDOWN_HTML_OBJ): $(MARKDOWN_SRCS)
+
+.SUFFIXES: .html .litcoffee
+.litcoffee.html:
+	(echo $(MARKDOWN_PREFIX) > $@) && ($(MARKDOWN_EXE) $(MARKDOWN_EXE_ARGS) $< >> $@) && (echo $(MARKDOWN_SUFFIX) >> $@)
+$(LITCOFFEE_HTML_OBJ): $(LITCOFFEE_SRCS)
+
 markdown: $(MARKDOWN_HTML)
+litcoffee: $(LITCOFFEE_HTML)
+
 docco: $(COFFEE_SRCS) $(NODE_MODULES)
 	rm -rf docs/docco
 	mkdir -p docs
@@ -122,6 +136,7 @@ docco: $(COFFEE_SRCS) $(NODE_MODULES)
 clean-docs: clean-docco clean-markdown;
 clean-docco:; rm -rf docs/docco
 clean-markdown:; rm -rf $(MARKDOWN_HTML)
+clean-litcoffee:; rm -rf $(LITCOFFEE_HTML)
 
 ################################################################################
 # EOF ##########################################################################

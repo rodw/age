@@ -38,6 +38,7 @@ class MemoryDataStore extends DataStore
     p = Util.deep_clone(@game_states[player.id])
     unless p?
       p = {id:player.id,achievements:[],history:[]}
+      @game_states[p.id] = p
     callback?(null,p)
 
 # The MemoryDataStore type is exported as `MemoryDataStore`.
