@@ -69,7 +69,7 @@ clean-js:
 module: test coverage docs
 	mkdir -p $(MODULE_DIR)
 	cp README.* $(MODULE_DIR)
-	cp ../license.txt $(MODULE_DIR)
+	cp LICENSE $(MODULE_DIR)
 	cp -r lib $(MODULE_DIR)
 	cp -r test $(MODULE_DIR)
 	cp -r docs $(MODULE_DIR)
@@ -79,7 +79,7 @@ test-module-install: clean-test-module-install module
 	mkdir -p ${TEST_MODULE_DIR}
 	cd ${TEST_MODULE_DIR}
 	npm install "$(CURDIR)/${MODULE_DIR}"
-	node -e "require('assert').ok(require('ageism').GameEngine !== null);" && echo "N { printf(\"IT WORKED\!\");}" | ./bin/gvprss | grep "IT WORKED\!" && echo "It worked!" && cd $(CURDIR) && rm -rf ${TEST_MODULE_DIR}
+	node -e "require('assert').ok(require('age').GameEngine !== null);" && echo "It worked!" && cd $(CURDIR) && rm -rf ${TEST_MODULE_DIR}
 $(NODE_MODULES): $(PACKAGE_JSON)
 	$(NPM_EXE) prune
 	$(NPM_EXE) --silent install

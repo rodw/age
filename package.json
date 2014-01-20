@@ -1,7 +1,7 @@
 {
   "name":         "age",
   "description":  "AGE is an Abstract Gameifiction Engine.",
-  "version":      "0.0.1",
+  "version":      "0.1.0",
   "keywords":     [ "gamification", "game mechanics", "game" ],
   "license":      "MIT",
   "author":       "Rod Waldhoff <the-letter-r-followed-by-my-last-name@gmail.com> http://heyrod.com/",
@@ -13,14 +13,13 @@
   "scripts":      { "test": "make test" },
   "directories":  { "lib":"lib", "doc":"docs" },
   "devDependencies" : {
-    "coffee-script"   : "latest",
-    "uglify-js"       : "latest",
-    "expresso"        : "latest",
-    "jscoverage"      : "latest",
-    "mocha"           : "latest",
-    "should"          : "latest",
-    "marked"          : "latest",
-    "docco"           : "latest"
+    "coffee-script"   : ">= 1.6.3",
+    "expresso"        : ">= 0.9.2",
+    "jscoverage"      : ">= 0.3.8",
+    "mocha"           : ">= 1.17.0",
+    "should"          : ">= 3.0.1",
+    "marked"          : ">= 0.3.0",
+    "docco"           : ">= 0.6.2"
   },
   "engines": {
     "node":       ">= 0.10.3"

@@ -4,6 +4,20 @@ The [Stack Exchange](http://stackexchange.com/) family of websites (notably, the
 
 Let's implement some of the StackOverflow badges to demonstrate the use of the [Abstract Gamification Engine](https://github.com/rodw/age).
 
+## About this File
+
+This demonstation is written in the [Literate CoffeeScript](http://coffeescript.org/#literate) format.
+
+It is both [Markdown](http://daringfireball.net/projects/markdown/) document and an executable [CoffeeScript](http://coffeescript.org/) source file.
+
+To execute the CoffeeScript parts of this file, simply run:
+
+`coffee ../docs/stack-exchange-example.litcoffee`
+
+from within the module's root directory.
+
+If everything is working properly, you should see the various `console.log` messages littered throughout the examples above, culminating in `Success! Done validating the achievement rules`. If there is a problem, the `coffee` invocation should return a error (non-zero) response code.
+
 ## The Domain Model
 
 [StackOverflow](http://stackoverflow.com/) is a robust question-and-answer web-site. Users can ask and answer questions, and have various ways to edit, comment on, promote and demote both their questions and questions posted by others.
@@ -73,7 +87,7 @@ When a relevant event occurs, our domain model will notify the GameEngine via th
 
 ##### Use Case 1: Creating a new user
 
-Our basic user model requires little more a username and a numeric identifier.  But to avoid expensive lookups, we'll store some additional information about user activity.  Specifically, for each user, we'll store:
+Our basic user model requires little more than a username and a numeric identifier.  But to avoid expensive lookups, we'll store some additional information about user activity.  Specifically, for each user, we'll store:
 
 1. An identifier for the user.
 2. A username (display name) for the user.
@@ -509,9 +523,9 @@ The base `AchievementRule` class is helpful, but we are not *required* to use it
 
 Specifically, every AGE achievement rule must define two properties:
 
-1. **`predicate`** - A function that determines whether or not a given player (user) has earned the achivement represented by this object. The `predicate` method accepts four parameters: a key value, a `GameEngine` instance, a player object and a callback function.  The callback method expects two parameters: an error object (only non-`null` if an error occurred during the `predicate`'s processing) and a boolean (`true` or `false`) value indicating whether or not this achievement was earned.
+1. **predicate** - A function that determines whether or not a given player (user) has earned the achivement represented by this object. The `predicate` method accepts four parameters: a key value, a `GameEngine` instance, a player object and a callback function.  The callback method expects two parameters: an error object (only non-`null` if an error occurred during the `predicate`'s processing) and a boolean (`true` or `false`) value indicating whether or not this achievement was earned.
 
-2. **`key`** - An identifier for this achievement. When an achievement is earned, this identifier will be included in the player's `achievements` array (as returned by `GameEngine.get_player_achievements`).
+2. **key** - An identifier for this achievement. When an achievement is earned, this identifier will be included in the player's `achievements` array (as returned by `GameEngine.get_player_achievements`).
 
    The achievement rule's `key` attribute can take several forms:
 
@@ -521,11 +535,11 @@ Specifically, every AGE achievement rule must define two properties:
 
 In addition, each AGE achievement rule *can* include additional properties that modify the GameEngine's behavior:
 
-3. **`multiplicity`** - A number that indicates how many times this achievement can be earned by a given player.  When `multiplicity` is `1`, the achievement can only be earned one time.  When `multiplicity` is some other positive integer `n`, the achievement can be earned at most `n` times.  When  `multiplicity` is `0` (or `null` or undefined), an achievement can be earned an infinite number of times.
+3. **multiplicity** - A number that indicates how many times this achievement can be earned by a given player.  When `multiplicity` is `1`, the achievement can only be earned one time.  When `multiplicity` is some other positive integer `n`, the achievement can be earned at most `n` times.  When  `multiplicity` is `0` (or `null` or undefined), an achievement can be earned an infinite number of times.
 
    Note that an achievement rule implementation is free to set `multiplicity` to `0` and enforce its own "mulitiplicity" logic. But when `multiplicity` is a positive integer, the GameEngine will ensure that the achievement is awarded at most `multiplicity` times by any individual player, and can use this information to shortcut rule evaluation.
 
-4. **`transient`** - By default, once a player has earned an achievement, recognition of that fact can be recorded in the persistence data store.  (And when the achievement has been awarded `multiplicity` times, the GameEngine doesn't even bother to re-evaluate the `predicate`.)  Setting `transient` to `true` overrides this default behavior, preventing the achievement from being peristently saved in player's `achievements` list.  When a rule is `transient`, the corresponding `predicate` will be evaluated every time `GameEngine.get_player_achievements` is invoked.
+4. **transient** - By default, once a player has earned an achievement, recognition of that fact can be recorded in the persistence data store.  (And when the achievement has been awarded `multiplicity` times, the GameEngine doesn't even bother to re-evaluate the `predicate`.)  Setting `transient` to `true` overrides this default behavior, preventing the achievement from being peristently saved in player's `achievements` list.  When a rule is `transient`, the corresponding `predicate` will be evaluated every time `GameEngine.get_player_achievements` is invoked.
 
    This allows, among other features, time-sensitive achievements.  For example, an achievement might be based on whether the user (player) has visited a specific page *today*.
 
@@ -910,8 +924,22 @@ Now he *should* have the "Sufferage" badge:
     assert_achievement john, "Sufferage (#{to_date_str(Date.now())})", ()->
       console.log "  ...now John has the Sufferage badge."
 
-#### End of the Achievemnt Rule Tests
+#### End of the Achievement Rule Tests
 
 And with that, we've tested all of our achievements
 
     console.log "...Success! Done validating the achievement rules.\n"
+
+## Running this Example
+
+This demonstation is written in the [Literate CoffeeScript](http://coffeescript.org/#literate) format.
+
+It is both [Markdown](http://daringfireball.net/projects/markdown/) document and an executable [CoffeeScript](http://coffeescript.org/) source file.
+
+To execute the CoffeeScript parts of this file, simply run:
+
+`coffee ../docs/stack-exchange-example.litcoffee`
+
+from within the module's root directory.
+
+If everything is working properly, you should see the various `console.log` messages littered throughout the examples above, culminating in `Success! Done validating the achievement rules`. If there is a problem, the `coffee` invocation should return a error (non-zero) response code.
