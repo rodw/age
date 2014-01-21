@@ -1,8 +1,8 @@
 {
   "name":         "age",
   "description":  "AGE is an Abstract Gameifiction Engine.",
-  "version":      "0.2.0",
-  "keywords":     [ "gamification", "game mechanics", "game", "badges", "achievements" ],
+  "version":      "0.2.1",
+  "keywords":     [ "gamification", "game mechanics", "game", "badges", "achievements", "rewards" ],
   "license":      "MIT",
   "author":       "Rod Waldhoff <the-letter-r-followed-by-my-last-name@gmail.com> http://heyrod.com/",
   "contributors": [ ],

@@ -178,6 +178,24 @@ class GameEngine extends EventEmitter
         Util.for_each_async(keys,for_each,callback)
 
 
+  # (not a guaranteed part of the GameEngine interface)
+  achievements_by_player:(callback)=>
+    unless @datastore.enumerate_player_ids?
+      callback?(new Error("Method not supported"))
+    else
+      @datastore.enumerate_player_ids (err,players)=>
+        map = {}
+        for_each = (id,index,list,next)=>
+          @get_player_achievements {id:id}, (err,achievements)=>
+            if err?
+              callback?(err)
+            else
+              map[id] = achievements
+              next()
+        when_done = ()=>callback?(null,map)
+        Util.for_each_async(players,for_each,when_done)
+
+
 
 # The GameEngine is exported under the name `GameEngine`.
 exports = exports ? this

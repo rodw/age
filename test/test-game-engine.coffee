@@ -121,6 +121,27 @@ describe 'GameEngine',=>
               (achievement2 in achievements).should.be.ok
               done()
 
+  it 'can enumerate achievements by player',(done)=>
+    player1 = { id:12346, name: { first: 'John', last: 'Doe' } }
+    player2 = { id:6789, name: { first: 'Jane', last: 'Smith' } }
+    achievement1 = "Some Achievement"
+    achievement2 = "Another Achievement"
+    @engine.add_achievement player1, achievement1, (err)=>
+      should.not.exist err
+      @engine.add_achievement player1, achievement2, (err)=>
+        should.not.exist err
+        @engine.add_achievement player2, achievement2, (err)=>
+          should.not.exist err
+          @engine.achievements_by_player (err,map)=>
+            should.not.exist err
+            Object.keys(map).length.should.equal 2
+            map[player1.id].length.should.equal 2
+            (achievement1 in map[player1.id]).should.be.ok
+            (achievement2 in map[player1.id]).should.be.ok
+            map[player2.id].length.should.equal 1
+            (achievement2 in map[player2.id]).should.be.ok
+            done()
+
   it 'emits  \"event-occurred\" events',(done)=>
     player = { id:12346, name: { first: 'John', last: 'Doe' } }
     event = "Some Event"

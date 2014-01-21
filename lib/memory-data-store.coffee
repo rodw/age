@@ -41,6 +41,10 @@ class MemoryDataStore extends DataStore
       @game_states[p.id] = p
     callback?(null,p)
 
+  # (not a guaranteed part of the DataStore interface)
+  enumerate_player_ids:(callback)=>
+    callback(null,Object.keys(@game_states))
+
 # The MemoryDataStore type is exported as `MemoryDataStore`.
 exports = exports ? this
 exports.MemoryDataStore = MemoryDataStore
