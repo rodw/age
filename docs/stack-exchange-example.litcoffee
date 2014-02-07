@@ -8,11 +8,11 @@ Let's implement some of the StackOverflow badges to demonstrate the use of the [
 
 This demonstation is written in the [Literate CoffeeScript](http://coffeescript.org/#literate) format.
 
-It is both [Markdown](http://daringfireball.net/projects/markdown/) document and an executable [CoffeeScript](http://coffeescript.org/) source file.
+It is both a [Markdown](http://daringfireball.net/projects/markdown/) document and an executable [CoffeeScript](http://coffeescript.org/) source file.
 
 To execute the CoffeeScript parts of this file, simply run:
 
-`coffee ../docs/stack-exchange-example.litcoffee`
+`coffee docs/stack-exchange-example.litcoffee`
 
 from within the module's root directory.
 
