@@ -16,7 +16,7 @@ To execute the CoffeeScript parts of this file, simply run:
 
 from within the module's root directory.
 
-If everything is working properly, you should see the various `console.log` messages littered throughout the examples above, culminating in `Success! Done validating the achievement rules`. If there is a problem, the `coffee` invocation should return a error (non-zero) response code.
+If everything is working properly, you should see the various `console.log` messages listed below, culminating in `Success! Done validating the achievement rules`. If there is a problem, the `coffee` invocation should return a error (non-zero) response code.
 
 ## The Domain Model
 
