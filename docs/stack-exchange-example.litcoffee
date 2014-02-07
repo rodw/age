@@ -909,7 +909,7 @@ Now Jane *should* have the "Supporter" badge:
 
     console.log "  The Sufferage Badge..."
 
-John hasn't yet upvoted 30 posts today, so she does not have the Sufferage badge:
+John hasn't yet upvoted 30 posts today, so he does not have the Sufferage badge:
 
     assert_no_achievement john, "Sufferage (#{to_date_str(Date.now())})", ()->
       console.log "  ...John doesn't have the Sufferage badge yet."
@@ -929,17 +929,3 @@ Now he *should* have the "Sufferage" badge:
 And with that, we've tested all of our achievements
 
     console.log "...Success! Done validating the achievement rules.\n"
-
-## Running this Example
-
-This demonstation is written in the [Literate CoffeeScript](http://coffeescript.org/#literate) format.
-
-It is both [Markdown](http://daringfireball.net/projects/markdown/) document and an executable [CoffeeScript](http://coffeescript.org/) source file.
-
-To execute the CoffeeScript parts of this file, simply run:
-
-`coffee ../docs/stack-exchange-example.litcoffee`
-
-from within the module's root directory.
-
-If everything is working properly, you should see the various `console.log` messages littered throughout the examples above, culminating in `Success! Done validating the achievement rules`. If there is a problem, the `coffee` invocation should return a error (non-zero) response code.
